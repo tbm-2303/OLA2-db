@@ -171,12 +171,12 @@ En tabel er i **Anden Normalform (2NF)** hvis:
 ## **Tredje Normalform (3NF)**
 
 ### **Definition**
-En tabel er i **Tredje Normalform (3NF)** hvis:
-1. **Den er i 2NF**.
-2. **Den har ingen transitive afhængigheder**, dvs. ingen ikke-nøgleattribut afhænger af en anden ikke-nøgleattribut.
+En tabel er i Tredje Normalform (3NF) hvis:
+1. Den er i 2NF.
+2. Den har ingen transitive afhængigheder, dvs. ingen ikke-nøgleattribut afhænger af en anden ikke-nøgleattribut.
 
 ### **Hvad er en transitiv afhængighed?**
-En **transitiv afhængighed** opstår, når en ikke-nøgleattribut afhænger af en anden ikke-nøgleattribut, i stedet for at afhænge direkte af primærnøglen.
+En `transitiv afhængighed` opstår, når en ikke-nøgleattribut afhænger af en anden ikke-nøgleattribut, i stedet for at afhænge direkte af primærnøglen.
 
 Hvis vi har følgende afhængigheder:
 
@@ -223,15 +223,58 @@ Så er der en transitiv afhængighed: **A → C**.
 ---
 
 
+## Boyce-Codd Normal Form (BCNF)
+
+### Definition
+En tabel er i Boyce–Codd Normalform (BCNF), hvis:
+1. For hver ikke-triviel funktionel afhængighed (dvs. en afhængighed X → Y, hvor Y ikke er en del af X) er X en supernøgle for tabellen.
+2. Det betyder, at alle determinanter (de attributter, der bestemmer andre attributter) skal være supernøgler.
+3. BCNF fjerner alle redundanser, der opstår på grund af funktionelle afhængigheder, hvor determinanten ikke er en supernøgle. Ved at sikre, at alle funktionelle afhængigheder er “baseret på” supernøgler, forhindres opdaterings-, indsætnings- og sletningsanomalier.
+
+
+I tabellen **members** er `member_id` primærnøgle, og alle andre attributter (navn, email, phone, start_date, membership_id og discount) bør afhænge af `member_id`. Et potentielt problem kunne opstå, hvis `membership_id` (remmednøgle) funktionelt bestemmer discount, dvs. hvis rabatten er ens for alle medlemmer med samme medlemskabstype, vil der være en funktionel afhængighed: membership_id → discount. Men i tabellen members er membership_id ikke en supernøgle (den unikt identificerer ikke en række, da flere medlemmer kan have samme medlemskabstype). Hvis discount derimod er en individuel egenskab for hvert medlem (f.eks. baseret på personlige forhandlinger), er denne afhængighed ikke problematisk, og tabellen forbliver i BCNF.
+
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Fjerde normalform (NF4)
 
 ### Definition
-- Fjerde normalform sigter mod at fjerne multiværdiafhængigheder i en tabel, hvilket betyder, at hvis en bestemt nøgle(eller attribut)bestemmer flere uafhængige sæt værdier for andre attributter, skal disse opdeles for at undgå redundans og opdateringsanomalier.
+Fjerde normalform sigter mod at fjerne `multiværdiafhængigheder` i en tabel, hvilket betyder, at hvis en bestemt nøgle(eller attribut)bestemmer flere uafhængige sæt værdier for andre attributter, skal disse opdeles for at undgå redundans og opdateringsanomalier.
 
 
 
 `Multiværdiafhængighed` sker, når en attribut `A` i en tabel entydigt bestemmer et sæt værdier for en anden attribut `B`(noteret som A →→ B).
-Denne afhængighed er ikke-trivial, hvis `B` ikke er en del af `A`, og `B` ikke omfatter alle attributter i tabellen.
+Denne afhængighed er `ikke-trivial`, hvis `B` ikke er en del af `A`, og `B` ikke omfatter alle attributter i tabellen.
 
 
 
