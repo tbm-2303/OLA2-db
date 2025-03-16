@@ -89,6 +89,178 @@
 ![ER Diagram](ER-diagram2.png)
 
 
+
+
+
+
+# Database Normalisering: 1NF, 2NF og 3NF
+
+Normalisering er en proces inden for databasedesign, der reducerer redundans og sikrer dataintegritet. De vigtigste normalformer Første Normalform (1NF), **Anden Normalform (2NF) og Tredje Normalform (3NF) hjælper med at organisere relationelle databaser effektivt.
+
+---
+
+## **Første Normalform (1NF)**
+
+### **Definition**
+En tabel er i Første Normalform (1NF) hvis:
+1. Alle kolonner indeholder atomare værdier** (dvs. ingen kolonne må have flere værdier i én celle).
+2. Hver kolonne indeholder værdier af samme datatype** (f.eks. må en kolonne ikke blande tal og tekst).
+3. Hver række har en unik identifikation**, ofte ved hjælp af en primærnøgle.
+
+### **Eksempel på en tabel, der bryder 1NF**
+| Student_ID | Navn    | Fag           |
+|-----------|---------|----------------|
+| 101       | Alice   | Matematik, Fysik |
+| 102       | Bob     | Kemi           |
+| 103       | Charlie | Matematik, Biologi |
+
+**Problem:**  
+- Kolonnen `Fag` indeholder flere værdier i én celle (f.eks. "Matematik, Fysik").
+
+### **Hvordan bringes den i 1NF?**
+For at opnå 1NF skal vi opdele de flerværdige attributter i separate rækker:
+
+| Student_ID | Navn    | Fag       |
+|-----------|---------|------------|
+| 101       | Alice   | Matematik  |
+| 101       | Alice   | Fysik      |
+| 102       | Bob     | Kemi       |
+| 103       | Charlie | Matematik  |
+| 103       | Charlie | Biologi    |
+
+**Resultat:**  
+- Hver celle indeholder kun én værdi → Tabellen er nu i **1NF**.
+
+---
+
+## **Anden Normalform (2NF)**
+
+### **Definition**
+En tabel er i **Anden Normalform (2NF)** hvis:
+1. **Den er i 1NF**.
+2. **Alle ikke-nøgleattributter er fuldstændigt funktionelt afhængige af hele primærnøglen**.  
+   - Dvs. der må ikke være **partielle afhængigheder**, hvor en attribut kun afhænger af en del af en sammensat primærnøgle.
+
+### **Eksempel på en tabel, der bryder 2NF**
+| Order_ID | Product_ID | Produktnavn | Kunde_ID | Kunde_navn |
+|---------|------------|-------------|----------|------------|
+| 1       | 101        | Bærbar PC   | 2001     | Alice      |
+| 2       | 102        | Printer     | 2002     | Bob        |
+| 3       | 101        | Bærbar PC   | 2003     | Charlie    |
+
+**Problem:**  
+- **Produktnavn** afhænger kun af **Product_ID**, ikke af hele primærnøglen (**Order_ID, Product_ID**).
+- **Kunde_navn** afhænger kun af **Kunde_ID**, ikke af hele primærnøglen.
+
+### **Hvordan bringes den i 2NF?**
+Opdel tabellen i to:
+
+**Bestillinger (Orders)**
+| Order_ID | Product_ID | Kunde_ID |
+|---------|------------|----------|
+| 1       | 101        | 2001     |
+| 2       | 102        | 2002     |
+| 3       | 101        | 2003     |
+
+**Produkter (Products)**
+| Product_ID | Produktnavn  |
+|------------|-------------|
+| 101        | Bærbar PC   |
+| 102        | Printer     |
+
+**Kunder (Customers)**
+| Kunde_ID | Kunde_navn |
+|----------|-----------|
+| 2001     | Alice     |
+| 2002     | Bob       |
+| 2003     | Charlie   |
+
+**Resultat:**  
+- Nu afhænger **Produktnavn** kun af **Product_ID** i en separat tabel.  
+- **Kunde_navn** afhænger kun af **Kunde_ID** i en separat tabel.  
+- Tabellen er nu i **2NF**.
+
+---
+
+## **Tredje Normalform (3NF)**
+
+### **Definition**
+En tabel er i **Tredje Normalform (3NF)** hvis:
+1. **Den er i 2NF**.
+2. **Den har ingen transitive afhængigheder**, dvs. ingen ikke-nøgleattribut afhænger af en anden ikke-nøgleattribut.
+
+### **Hvad er en transitiv afhængighed?**
+En **transitiv afhængighed** opstår, når en ikke-nøgleattribut afhænger af en anden ikke-nøgleattribut, i stedet for at afhænge direkte af primærnøglen.
+
+Hvis vi har følgende afhængigheder:
+
+- **A → B** (A bestemmer B)
+- **B → C** (B bestemmer C)
+
+Så er der en transitiv afhængighed: **A → C**.
+
+### **Eksempel på en tabel, der bryder 3NF**
+| Medlem_ID | Medlemsnavn | Medlemskabstype | Pris  |
+|----------|------------|-----------------|------|
+| 1        | Alice      | Premium         | 500  |
+| 2        | Bob        | Basis           | 200  |
+| 3        | Charlie    | Elite           | 800  |
+
+**Problem:**  
+- **Medlemskabstype** bestemmer **Pris** (dvs. **Medlemskabstype → Pris**).  
+- Men **Pris** afhænger ikke direkte af **Medlem_ID** (den primære nøgle).  
+- Dette skaber en **transitiv afhængighed**.
+
+### **Hvordan bringes den i 3NF?**
+Opdel tabellen i to:
+
+**Medlemmer (Members)**
+| Medlem_ID | Medlemsnavn | Medlemskabstype |
+|----------|------------|-----------------|
+| 1        | Alice      | Premium         |
+| 2        | Bob        | Basis           |
+| 3        | Charlie    | Elite           |
+
+**Medlemskabstyper (Memberships)**
+| Medlemskabstype | Pris  |
+|-----------------|------|
+| Basis          | 200  |
+| Premium        | 500  |
+| Elite          | 800  |
+
+**Resultat:**  
+- Nu afhænger **Pris** kun af **Medlemskabstype**, som har sin egen tabel.  
+- Tabellen er nu i **3NF**.
+
+---
+
+## **Opsummering af Normalformer**
+| Normalform | Krav |
+|------------|------|
+| **1NF** | Ingen gentagende grupper eller multi-værdier i en enkelt celle. |
+| **2NF** | Ingen partielle afhængigheder; hver ikke-nøgleattribut afhænger af hele primærnøglen. |
+| **3NF** | Ingen transitive afhængigheder; ikke-nøgleattributter må ikke afhænge af andre ikke-nøgleattributter. |
+
+Ved at følge disse normalformer sikrer vi, at databasen er struktureret optimalt, minimerer datadubletter og reducerer risikoen for opdateringsanomalier.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Normalisering af ER-modellen
 
 ### 🔹 1NF: Atomare attributter og ingen gentagne grupper  
