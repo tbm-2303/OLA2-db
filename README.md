@@ -33,7 +33,7 @@
 
 ---
 
-## Forretningsregler og Attributter
+# Forretningsregler og Attributter
 
 - **Medlemstype (`membership_type`)**  
   - Et medlem har én fast medlemskabstype (Basis, Premium, Elite).  
@@ -49,10 +49,4 @@
   - Dette lagres som en **attribut** i `classes`-tabellen frem for en separat tabel, da det er en fast egenskab pr. hold.  
   - Hvis deltagergrænsen skulle variere per session, ville det kræve en `class_sessions`-tabel.
 
-## Kommentarer til ER design:
-
-### Vi har brugt en Booking-tabel til at håndtere mange-til-mange-relationen mellem medlemmer og træningshold.
-
-### Betaling håndterer medlemskabsbetalinger samt eventuelle rabatter.
-
-### Instruktør er knyttet til træningshold som en 1:M-relation, da hver klasse har en instruktør, men en instruktør kan undervise flere hold.
+![ER diagram](relative/path/to/image.png)
