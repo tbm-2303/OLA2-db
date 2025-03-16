@@ -213,7 +213,6 @@ Så er der en transitiv afhængighed: **A → C**.
 | 2            | Basis          | 199            |  
 
 ---
-
 ## **Opsummering af Normalformer**
 | Normalform | Krav |
 |------------|------|
@@ -221,11 +220,18 @@ Så er der en transitiv afhængighed: **A → C**.
 | **2NF** | Ingen partielle afhængigheder; hver ikke-nøgleattribut afhænger af hele primærnøglen. |
 | **3NF** | Ingen transitive afhængigheder; ikke-nøgleattributter må ikke afhænge af andre ikke-nøgleattributter. |
 
+---
+
+
+## Fjerde normalform (NF4)
+
+### Definition
+- Fjerde normalform sigter mod at fjerne multiværdiafhængigheder i en tabel, hvilket betyder, at hvis en bestemt nøgle(eller attribut)bestemmer flere uafhængige sæt værdier for andre attributter, skal disse opdeles for at undgå redundans og opdateringsanomalier.
 
 
 
-
-
+`Multiværdiafhængighed` sker, når en attribut `A` i en tabel entydigt bestemmer et sæt værdier for en anden attribut `B`(noteret som A →→ B).
+Denne afhængighed er ikke-trivial, hvis `B` ikke er en del af `A`, og `B` ikke omfatter alle attributter i tabellen.
 
 
 
