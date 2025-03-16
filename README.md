@@ -227,12 +227,12 @@ Så er der en transitiv afhængighed: **A → C**.
 
 ### Definition
 En tabel er i Boyce–Codd Normalform (BCNF), hvis:
-1. For hver ikke-triviel funktionel afhængighed (dvs. en afhængighed X → Y, hvor Y ikke er en del af X) er X en supernøgle for tabellen.
-2. Det betyder, at alle determinanter (de attributter, der bestemmer andre attributter) skal være supernøgler.
+1. For hver `ikke-triviel funktionel afhængighed` (dvs. en afhængighed X → Y, hvor Y ikke er en del af X) er X en supernøgle for tabellen.
+2. Det betyder, at alle `determinanter` (de attributter, der bestemmer andre attributter) skal være supernøgler.
 3. BCNF fjerner alle redundanser, der opstår på grund af funktionelle afhængigheder, hvor determinanten ikke er en supernøgle. Ved at sikre, at alle funktionelle afhængigheder er “baseret på” supernøgler, forhindres opdaterings-, indsætnings- og sletningsanomalier.
 
 
-I tabellen **members** er `member_id` primærnøgle, og alle andre attributter (navn, email, phone, start_date, membership_id og discount) bør afhænge af `member_id`. Et potentielt problem kunne opstå, hvis `membership_id` (remmednøgle) funktionelt bestemmer discount, dvs. hvis rabatten er ens for alle medlemmer med samme medlemskabstype, vil der være en funktionel afhængighed: membership_id → discount. Men i tabellen members er membership_id ikke en supernøgle (den unikt identificerer ikke en række, da flere medlemmer kan have samme medlemskabstype). Hvis discount derimod er en individuel egenskab for hvert medlem (f.eks. baseret på personlige forhandlinger), er denne afhængighed ikke problematisk, og tabellen forbliver i BCNF.
+I tabellen **members** er `member_id` primærnøgle, og alle andre attributter (navn, email, phone, start_date, membership_id og discount) bør afhænge af member_id. Et potentielt problem kunne opstå, hvis `membership_id` (remmednøgle) funktionelt bestemmer discount, dvs. hvis rabatten er ens for alle medlemmer med samme medlemskabstype, vil der være en funktionel afhængighed: membership_id → discount. Men i tabellen members er membership_id ikke en supernøgle (den unikt identificerer ikke en række, da flere medlemmer kan have samme medlemskabstype). Hvis discount derimod er en individuel egenskab for hvert medlem (f.eks. baseret på personlige forhandlinger), er denne afhængighed ikke problematisk, og tabellen forbliver i BCNF.
 
 
 ---
