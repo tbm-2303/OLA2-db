@@ -249,19 +249,19 @@ Så er der en transitiv afhængighed: **A → C**.
 - `phone` (VARCHAR(20))  
 - `start_date` (DATE)  
 - `membership_id` (FK til MEMBERSHIP)  
-- `discount` (DECIMAL, fx DECIMAL(5,2))  
+- `discount` (FLOAT)  
 
 **Eksempel:**  
-`MEMBER (member_id PK, name VARCHAR(100), email VARCHAR(100), phone VARCHAR(20), start_date DATE, membership_id FK, discount DECIMAL(5,2))`  
+`MEMBER (member_id PK, name VARCHAR(100), email VARCHAR(100), phone VARCHAR(20), start_date DATE, membership_id FK, discount FLOAT)`  
 
 ## MEMBERSHIP  
 **Attributter:**  
 - `membership_id` (PK)  
 - `type` (ENUM('Basis', 'Premium', 'Elite'))  
-- `price` (DECIMAL, fx DECIMAL(10,2))  
+- `price` (FLOAT)  
 
 **Eksempel:**  
-`MEMBERSHIP (membership_id PK, type ENUM('Basis', 'Premium', 'Elite'), price DECIMAL(10,2))`  
+`MEMBERSHIP (membership_id PK, type ENUM('Basis', 'Premium', 'Elite'), price FLOAT)`  
 
 ## INSTRUCTOR  
 **Attributter:**  
@@ -298,16 +298,12 @@ Så er der en transitiv afhængighed: **A → C**.
 **Attributter:**  
 - `payment_id` (PK)  
 - `member_id` (FK til MEMBER)  
-- `amount` (DECIMAL, fx DECIMAL(10,2))  
+- `amount` (FLOAT)  
 - `payment_date` (DATE)  
 - `payment_method` (VARCHAR(50))  
 
 **Eksempel:**  
-`PAYMENT (payment_id PK, member_id FK, amount DECIMAL(10,2), payment_date DATE, payment_method VARCHAR(50))`  
-
-
-
-
+`PAYMENT (payment_id PK, member_id FK, amount FLOAT, payment_date DATE, payment_method VARCHAR(50))`  
 
 
 
