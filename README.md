@@ -172,18 +172,17 @@ Opdel `phone_numbers` i en ny tabel:
 
 ### Fordele
 1. **Bedre dataintegritet og mindre redundans**  
-   - Hvis vi beholder `membership_type` som en simpel attribut i `members`, skal vi gentage information om medlemskab (pris, adgangsregler) for hver medlem.  
-   - Ved at oprette en `memberships`-tabel sikrer vi, at medlemskabstyper **kun lagres ét sted**, hvilket forhindrer inkonsistens.  
+   - Hvis vi beholder `membership_type` som en simpel attribut i `members`, skal vi gentage information om medlemskab for hver medlem.  
+   - Ved at oprette en `memberships`-tabel sikrer vi, at medlemskabstyper kun lagres ét sted, hvilket forhindrer inkonsistens.  
 
 2. **Lettere at ændre medlemskabspriser**  
-   - Hvis vi senere ændrer prisen for **Premium**, behøver vi kun at opdatere **én række i `memberships`** i stedet for alle medlemmer med Premium-medlemskab.  
+   - Hvis vi senere ændrer prisen for Premium, behøver vi kun at opdatere én række i `memberships` i stedet for alle medlemmer med Premium-medlemskab.  
 
 3. **Gør systemet mere fleksibelt**  
-   - Hvis vi vil tilføje flere medlemskabstyper i fremtiden, kan vi **bare tilføje en ny række** i `memberships`, uden at ændre database-strukturen.  
-   - Vi kan også nemt tilføje ekstra fordele til hvert medlemskab (f.eks. "Gratis personlig træning" for Elite-medlemmer).  
+   - Hvis vi vil tilføje flere medlemskabstyper i fremtiden, kan vi bare tilføje en ny række i `memberships`, uden at ændre database-strukturen.   
 
 4. **Mulighed for at kontrollere adgang til klasser dynamisk**  
-   - Med en `membership_classes` tabel kan vi **styre præcist**, hvilke klasser et medlemskab giver adgang til.  
+   - Med en `membership_classes` tabel kan vi styre præcist, hvilke klasser et medlemskab giver adgang til.  
 
 ---
 
@@ -192,11 +191,11 @@ Opdel `phone_numbers` i en ny tabel:
    - For at få information om et medlems medlemskab, skal vi lave en `JOIN` mellem `members` og `memberships`, hvilket kan påvirke ydeevnen ved mange forespørgsler.  
 
 2. **Lidt mere kompleksitet i database-design**  
-   - Vi skal oprette en ekstra tabel (`memberships`) og sikre, at **alle medlemmer refererer til en gyldig `membership_id`**.  
+   - Vi skal oprette en ekstra tabel (`memberships`) og sikre, at alle medlemmer refererer til en gyldig `membership_id`.  
    - Kræver lidt mere administration af foreign-keys (FK).  
 
 3. **Måske unødvendigt ved små databaser**  
-   - Hvis fitnesscentret **kun har 3 faste medlemskaber**, og de sjældent ændres, kan det være overkill at oprette en ekstra tabel.  
+   - Hvis fitnesscentret kun har 3 faste medlemskaber, og de sjældent ændres, kan det være overkill at oprette en ekstra tabel.  
    - Hvis der sjældent ændres i medlemskaber, kan en simpel ENUM-type i `members` være tilstrækkelig.  
 
 ---
