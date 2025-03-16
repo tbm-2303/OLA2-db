@@ -49,4 +49,4 @@
   - Dette lagres som en **attribut** i `classes`-tabellen frem for en separat tabel, da det er en fast egenskab pr. hold.  
   - Hvis deltagergrænsen skulle variere per session, ville det kræve en `class_sessions`-tabel.
 
-![ER diagram](relative/path/to/image.png)
+![My Image](OLA2-db\ER diagram.png)
