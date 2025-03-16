@@ -49,4 +49,155 @@
   - Dette lagres som en **attribut** i `classes`-tabellen frem for en separat tabel, da det er en fast egenskab pr. hold.  
   - Hvis deltagergrænsen skulle variere per session, ville det kræve en `class_sessions`-tabel.
 
+## ER Diagram
 ![ER Diagram](ER-diagram.png)
+
+
+
+## Normalisering af ER-modellen
+
+### 🔹 1NF: Atomare attributter og ingen gentagne grupper  
+**Krav:**  
+- Alle attributter skal være atomare (ingen lister eller sammensatte værdier).  
+- Ingen gentagne grupper af data i samme tabel.  
+
+**Eksempel på brud på 1NF:**  
+| member_id | name  | phone_numbers     | membership_type |  
+|-----------|-------|------------------|----------------|  
+| 1         | Anna  | 12345678, 87654321 | Premium        |  
+| 2         | Peter | 23456789          | Basis          |  
+
+**Løsning:**  
+Opdel `phone_numbers` i en ny tabel:  
+
+**Opdateret tabel `members` (1NF):**  
+| member_id | name  | membership_type |  
+|-----------|-------|----------------|  
+| 1         | Anna  | Premium        |  
+| 2         | Peter | Basis          |  
+
+**Ny tabel `member_phones`:**  
+| phone_id | member_id | phone_number |  
+|----------|-----------|-------------|  
+| 1        | 1         | 12345678     |  
+| 2        | 1         | 87654321     |  
+| 3        | 2         | 23456789     |  
+
+---
+
+### 🔹 2NF: Fjern partielle funktionelle afhængigheder  
+**Krav:**  
+- Alle ikke-nøgle attributter skal afhænge af hele primærnøglen.  
+- Gælder kun for tabeller med sammensatte primærnøgler.  
+
+**Eksempel på brud på 2NF (før normalisering):**  
+| booking_id | member_id | class_id | member_name | class_name |  
+|------------|----------|---------|-------------|------------|  
+| 1          | 101      | 5001    | Anna        | Yoga       |  
+| 2          | 102      | 5002    | Peter       | Spinning   |  
+
+**Problemet:**  
+- `member_name` afhænger kun af `member_id`, ikke hele primærnøglen (`booking_id`).  
+- `class_name` afhænger kun af `class_id`, ikke hele primærnøglen (`booking_id`).  
+
+**Løsning:**  
+- Opdel tabellen i separate tabeller for medlemmer og klasser.  
+
+**Opdaterede tabeller (2NF):**  
+
+**`bookings`:**  
+| booking_id | member_id | class_id |  
+|------------|----------|---------|  
+| 1          | 101      | 5001    |  
+| 2          | 102      | 5002    |  
+
+**`members`:**  
+| member_id | member_name |  
+|----------|-------------|  
+| 101      | Anna        |  
+| 102      | Peter       |  
+
+**`classes`:**  
+| class_id | class_name  |  
+|---------|------------|  
+| 5001    | Yoga       |  
+| 5002    | Spinning   |  
+
+---
+
+### 🔹 3NF: Fjern transitive afhængigheder  
+**Krav:**  
+- Ikke-nøgle attributter må kun afhænge af **primærnøglen** – ikke andre ikke-nøgle attributter.  
+
+**Eksempel på brud på 3NF (før normalisering):**  
+| member_id | name  | membership_type | membership_price |  
+|-----------|------|----------------|-----------------|  
+| 1         | Anna | Premium        | 299            |  
+| 2         | Peter | Basis          | 199            |  
+
+**Problemet:**  
+- `membership_price` afhænger af `membership_type`, ikke direkte af `member_id`.  
+- Hvis prisen ændres, skal vi opdatere **alle rækker** med den medlemskabstype.  
+
+**Løsning:**  
+- Flyt `membership_type` og `membership_price` til en separat `memberships`-tabel.  
+
+**Opdaterede tabeller (3NF):**  
+
+**`members`:**  
+| member_id | name  | membership_id |  
+|-----------|------|--------------|  
+| 1         | Anna | 1            |  
+| 2         | Peter | 2            |  
+
+**`memberships`:**  
+| membership_id | membership_type | membership_price |  
+|--------------|----------------|-----------------|  
+| 1            | Premium        | 299            |  
+| 2            | Basis          | 199            |  
+
+---
+
+### 🔹 Hvis ER-modellen allerede er normaliseret  
+Hvis jeres ER-model allerede overholder 1NF, 2NF og 3NF, kan I vise et eksempel på et design, hvor **2NF og 3NF ville være brudt** og forklare, hvordan I har undgået det i jeres løsning.
+
+
+
+
+
+
+
+
+
+## Fordele og ulemper ved at oprette en `membership_type` tabel
+
+### Fordele
+1. **Bedre dataintegritet og mindre redundans**  
+   - Hvis vi beholder `membership_type` som en simpel attribut i `members`, skal vi gentage information om medlemskab (pris, adgangsregler) for hver medlem.  
+   - Ved at oprette en `memberships`-tabel sikrer vi, at medlemskabstyper **kun lagres ét sted**, hvilket forhindrer inkonsistens.  
+
+2. **Lettere at ændre medlemskabspriser**  
+   - Hvis vi senere ændrer prisen for **Premium**, behøver vi kun at opdatere **én række i `memberships`** i stedet for alle medlemmer med Premium-medlemskab.  
+
+3. **Gør systemet mere fleksibelt**  
+   - Hvis vi vil tilføje flere medlemskabstyper i fremtiden, kan vi **bare tilføje en ny række** i `memberships`, uden at ændre database-strukturen.  
+   - Vi kan også nemt tilføje ekstra fordele til hvert medlemskab (f.eks. "Gratis personlig træning" for Elite-medlemmer).  
+
+4. **Mulighed for at kontrollere adgang til klasser dynamisk**  
+   - Med en `membership_classes` tabel kan vi **styre præcist**, hvilke klasser et medlemskab giver adgang til.  
+
+---
+
+### Ulemper
+1. **Flere JOINs i forespørgsler**  
+   - For at få information om et medlems medlemskab, skal vi lave en `JOIN` mellem `members` og `memberships`, hvilket kan påvirke ydeevnen ved mange forespørgsler.  
+
+2. **Lidt mere kompleksitet i database-design**  
+   - Vi skal oprette en ekstra tabel (`memberships`) og sikre, at **alle medlemmer refererer til en gyldig `membership_id`**.  
+   - Kræver lidt mere administration af udenlandske nøgler (FK).  
+
+3. **Måske unødvendigt ved små databaser**  
+   - Hvis fitnesscentret **kun har 3 faste medlemskaber**, og de sjældent ændres, kan det være overkill at oprette en ekstra tabel.  
+   - Hvis der sjældent ændres i medlemskaber, kan en simpel ENUM-type i `members` være tilstrækkelig.  
+
+---
