@@ -220,61 +220,95 @@ Så er der en transitiv afhængighed: **A → C**.
 | **2NF** | Ingen partielle afhængigheder; hver ikke-nøgleattribut afhænger af hele primærnøglen. |
 | **3NF** | Ingen transitive afhængigheder; ikke-nøgleattributter må ikke afhænge af andre ikke-nøgleattributter. |
 
----
+## Every non-key attribute in a table should depend on the key, the whole key, and nothing but the key.
 
+---
 
 ## Boyce-Codd Normal Form (BCNF)
+- candidate key: an attribute, or combination of attributes, that uniquely identifies a row in the table. 
+- prime attribute: an attribute that belongs to at least one candidate key.
+- non-prime attribute: an attribute that doesn't belong to any candidate key.
 
-### Definition
-En tabel er i Boyce–Codd Normalform (BCNF), hvis:
-1. For hver `ikke-triviel funktionel afhængighed` (dvs. en afhængighed X → Y, hvor Y ikke er en del af X) er X en supernøgle for tabellen.
-2. Det betyder, at alle `determinanter` (de attributter, der bestemmer andre attributter) skal være supernøgler.
-3. BCNF fjerner alle redundanser, der opstår på grund af funktionelle afhængigheder, hvor determinanten ikke er en supernøgle. Ved at sikre, at alle funktionelle afhængigheder er “baseret på” supernøgler, forhindres opdaterings-, indsætnings- og sletningsanomalier.
-
-
-I tabellen **members** er `member_id` primærnøgle, og alle andre attributter (navn, email, phone, start_date, membership_id og discount) bør afhænge af member_id. Et potentielt problem kunne opstå, hvis `membership_id` (remmednøgle) funktionelt bestemmer discount, dvs. hvis rabatten er ens for alle medlemmer med samme medlemskabstype, vil der være en funktionel afhængighed: membership_id → discount. Men i tabellen members er membership_id ikke en supernøgle (den unikt identificerer ikke en række, da flere medlemmer kan have samme medlemskabstype). Hvis discount derimod er en individuel egenskab for hvert medlem (f.eks. baseret på personlige forhandlinger), er denne afhængighed ikke problematisk, og tabellen forbliver i BCNF.
-
-
+## 2NF
+- 2NF: We cannot have a non-prime attribute that depends on part of a candidate key. 
+## 3NF
+- 3NF: each non-prime attribute in a table should depend on every candidate key: it should never depend on part of a candidate key; and it should never depend on other non-prime attributes.
+## BCNF
+- With the exception of trivial functional dependencies, every function dependency in a table must be a dependency on a candidate key (or on a superset of a candidate key).
+- With the exception of trivial functional dependencies, every function dependency in a table must be a dependency on a `superkey`
 ---
 
 
+# Relationsmodel
+
+## MEMBER  
+**Attributter:**  
+- `member_id` (PK)  
+- `name` (VARCHAR(100))  
+- `email` (VARCHAR(100))  
+- `phone` (VARCHAR(20))  
+- `start_date` (DATE)  
+- `membership_id` (FK til MEMBERSHIP)  
+- `discount` (DECIMAL, fx DECIMAL(5,2))  
+
+**Eksempel:**  
+`MEMBER (member_id PK, name VARCHAR(100), email VARCHAR(100), phone VARCHAR(20), start_date DATE, membership_id FK, discount DECIMAL(5,2))`  
+
+## MEMBERSHIP  
+**Attributter:**  
+- `membership_id` (PK)  
+- `type` (ENUM('Basis', 'Premium', 'Elite'))  
+- `price` (DECIMAL, fx DECIMAL(10,2))  
+
+**Eksempel:**  
+`MEMBERSHIP (membership_id PK, type ENUM('Basis', 'Premium', 'Elite'), price DECIMAL(10,2))`  
+
+## INSTRUCTOR  
+**Attributter:**  
+- `instructor_id` (PK)  
+- `name` (VARCHAR(100))  
+- `email` (VARCHAR(100))  
+- `specialty` (VARCHAR(100))  
+
+**Eksempel:**  
+`INSTRUCTOR (instructor_id PK, name VARCHAR(100), email VARCHAR(100), specialty VARCHAR(100))`  
+
+## CLASS  
+**Attributter:**  
+- `class_id` (PK)  
+- `name` (VARCHAR(100))  
+- `max_participants` (INT)  
+- `instructor_id` (FK til INSTRUCTOR)  
+- `schedule` (DATETIME)  
+
+**Eksempel:**  
+`CLASS (class_id PK, name VARCHAR(100), max_participants INT, instructor_id FK, schedule DATETIME)`  
+
+## BOOKING  
+**Attributter:**  
+- `booking_id` (PK)  
+- `member_id` (FK til MEMBER)  
+- `class_id` (FK til CLASS)  
+- `booking_date` (DATE)  
+
+**Eksempel:**  
+`BOOKING (booking_id PK, member_id FK, class_id FK, booking_date DATE)`  
+
+## PAYMENT  
+**Attributter:**  
+- `payment_id` (PK)  
+- `member_id` (FK til MEMBER)  
+- `amount` (DECIMAL, fx DECIMAL(10,2))  
+- `payment_date` (DATE)  
+- `payment_method` (VARCHAR(50))  
+
+**Eksempel:**  
+`PAYMENT (payment_id PK, member_id FK, amount DECIMAL(10,2), payment_date DATE, payment_method VARCHAR(50))`  
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## Fjerde normalform (NF4)
-
-### Definition
-Fjerde normalform sigter mod at fjerne `multiværdiafhængigheder` i en tabel, hvilket betyder, at hvis en bestemt nøgle(eller attribut)bestemmer flere uafhængige sæt værdier for andre attributter, skal disse opdeles for at undgå redundans og opdateringsanomalier.
-
-
-
-`Multiværdiafhængighed` sker, når en attribut `A` i en tabel entydigt bestemmer et sæt værdier for en anden attribut `B`(noteret som A →→ B).
-Denne afhængighed er `ikke-trivial`, hvis `B` ikke er en del af `A`, og `B` ikke omfatter alle attributter i tabellen.
 
 
 
