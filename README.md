@@ -1,1 +1,2 @@
-# OLA2-db
+Software Dev. OLA2-db 
+Timothy Busk Mortensen - cph-tm246@cphbusiness.dk 
