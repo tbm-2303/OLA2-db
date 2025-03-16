@@ -158,8 +158,7 @@ Opdel `phone_numbers` i en ny tabel:
 
 ---
 
-### 🔹 Hvis ER-modellen allerede er normaliseret  
-Hvis jeres ER-model allerede overholder 1NF, 2NF og 3NF, kan I vise et eksempel på et design, hvor **2NF og 3NF ville være brudt** og forklare, hvordan I har undgået det i jeres løsning.
+
 
 
 
@@ -194,10 +193,12 @@ Hvis jeres ER-model allerede overholder 1NF, 2NF og 3NF, kan I vise et eksempel 
 
 2. **Lidt mere kompleksitet i database-design**  
    - Vi skal oprette en ekstra tabel (`memberships`) og sikre, at **alle medlemmer refererer til en gyldig `membership_id`**.  
-   - Kræver lidt mere administration af udenlandske nøgler (FK).  
+   - Kræver lidt mere administration af foreign-keys (FK).  
 
 3. **Måske unødvendigt ved små databaser**  
    - Hvis fitnesscentret **kun har 3 faste medlemskaber**, og de sjældent ændres, kan det være overkill at oprette en ekstra tabel.  
    - Hvis der sjældent ændres i medlemskaber, kan en simpel ENUM-type i `members` være tilstrækkelig.  
 
 ---
+### konklusion 
+  - Modellen overholder de tre første normalformer i forvejen, men det er besluttet at oprette en memberships tabel. Selv om det introducerer en grad a kompleksitet, så er fordelene større end ulemperne. Jeg vil gerne være mere fleksibel i designet, da vi stadig kan nå at ændre mening på nuværende tidspunkt i processen. 
