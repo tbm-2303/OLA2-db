@@ -50,7 +50,7 @@
   - Hvis deltagergrænsen skulle variere per session, ville det kræve en `class_sessions`-tabel.
 
 ## ER Diagram
-![ER Diagram](OLA2_erd)
+![ER Diagram](Test.png)
 
 ## Fordele og ulemper ved at oprette en `membership_type` tabel
 
@@ -86,7 +86,7 @@
 ### konklusion 
   - Modellen overholder de tre første normalformer i forvejen, men det er besluttet at oprette en memberships tabel. Selv om det introducerer en grad a kompleksitet, så er fordelene større end ulemperne. Jeg vil gerne være mere fleksibel i designet, da vi stadig kan nå at ændre mening på nuværende tidspunkt i processen. 
 ## NYT ER Diagram
-![ER Diagram](ER-diagram2.png)
+![ER Diagram](Test.png)
 
 
 
