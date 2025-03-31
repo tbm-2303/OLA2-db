@@ -50,7 +50,7 @@
   - Hvis deltagergrænsen skulle variere per session, ville det kræve en `class_sessions`-tabel.
 
 ## ER Diagram
-![ER Diagram](ER-diagram.png)
+![ER Diagram](OLA2_erd)
 
 ## Fordele og ulemper ved at oprette en `membership_type` tabel
 
